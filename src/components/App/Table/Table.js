@@ -10,23 +10,36 @@ class Table extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            datas: [],
+            index: -1,
             done: false
         };
     }
     componentWillMount = () =>{
-        this.props.fetchdatas();
+        this.props.fetchdatas().then(
+            ()=>{this.setState({datas: this.props.datas})},
+            (err) =>{console.log(err)}
+        );
+    }
+    editHandaler = (index) =>{
+       this.setState({done: true, index: index})
+    }
+    dataShow = () =>{
+        //console.log(this.state.index);
+        const data = this.state.datas[this.state.index];
+        console.log(data);
     }
     render() {
         const {datas} = this.props;
-        
         const tableItems = datas.length > 0 ? (
             <tbody>
-                {datas.map((data, index)=><TableRow key={index} index={index} data={data}  />)}
+                {datas.map((data, index)=><TableRow key={index} index={index} data={data} edit={this.editHandaler} />)}
             </tbody>     
         ): (<div className="no-data">No Data Available</div>)
 
         return (
-            <table>   
+            <div>
+              <table>   
                 <tbody>
                     <tr>
                         <th>company_name</th>
@@ -36,7 +49,9 @@ class Table extends Component {
                     </tr>
                     {tableItems}
                  </tbody>  
-            </table>
+              </table> 
+              <button onClick={this.dataShow}>Show</button>
+            </div>
         );
     }
 }

@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
-const TableRow = (props) =>{
-
-    return(
-        <tr >
-             <td contenteditable="true">{props.data.company_name}</td>
-             <td contenteditable="true">{props.data.product}</td>
-             <td contenteditable="true">{props.data.price}</td>
-             <td contenteditable="true">{props.data.fda_date_approved}</td>
-        </tr>
-    )
+class TableRow extends Component{
+    render(){
+        return(
+            <tr onClick={()=>{this.props.edit(this.props.index)}}>
+                 <td ref={`data${this.props.index}`}  contenteditable="true">{this.props.data.company_name}</td>
+                 <td ref={`data${this.props.index}`} contenteditable="true">{this.props.data.product}</td>
+                 <td ref={`data${this.props.index}`} contenteditable="true">{this.props.data.price}</td>
+                 <td ref={`data${this.props.index}`} contenteditable="true">{this.props.data.fda_date_approved}</td>
+            </tr>
+        )
+    }
+    
 }
 
-export default TableRow;
+export default connect(null,{})(TableRow);
