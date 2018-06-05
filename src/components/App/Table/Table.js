@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import './Table.css';
 import {fetchdatas} from '../../../redux/actions/tableActions';
+import TableRow from './TableRow/TableRow';
 
 class Table extends Component {
     constructor(props) {
@@ -17,25 +18,24 @@ class Table extends Component {
     }
     render() {
         const {datas} = this.props;
-        const tableHeaderData = datas[1];
-
-        //const tableHeader = Object.keys(tableHeaderData);
-        console.log(tableHeaderData);
+        
+        const tableItems = datas.length > 0 ? (
+            <tbody>
+                {datas.map((data, index)=><TableRow key={index} index={index} data={data}  />)}
+            </tbody>     
+        ): (<div className="no-data">No Data Available</div>)
 
         return (
-            <table>
+            <table>   
                 <tbody>
                     <tr>
-                        <th>Company</th>
-                        <th>Contact</th>
-                        <th>Country</th>
+                        <th>company_name</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>fda_date_approved</th>
                     </tr>
-                    <tr>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Germany</td>
-                    </tr>
-                </tbody>  
+                    {tableItems}
+                 </tbody>  
             </table>
         );
     }
