@@ -21,7 +21,15 @@ class Table extends Component {
     componentWillMount = () =>{
         this.setState({done: false})
         this.props.fetchdatas().then(
-            ()=>{this.setState({datas: this.props.datas, tableHeaderData: this.props.datas[1],done: true})},
+            ()=>{
+                let tableHeaderCount;
+                if((Object.keys(this.props.datas[1]).length)> (Object.keys(this.props.datas[0]).length)){
+                    tableHeaderCount = this.props.datas[1];
+                }else{
+                    tableHeaderCount = this.props.datas[0];
+                }
+                this.setState({datas: this.props.datas, tableHeaderData: tableHeaderCount ,done: true})
+            },
             (err) =>{console.log(err)}
         );
     }
