@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 
 import './Table.css';
 import {fetchdatas} from '../../../redux/actions/tableActions';
-//import TableRow from './TableRow/TableRow';
 
 class Table extends Component {
     constructor(props) {
@@ -13,25 +12,41 @@ class Table extends Component {
             datas: [],
             tableHeaderData:{},
             index: -1,
-            done: false
+            done: false,
+            editedDataBtn: false,
         };
+        this.editedData = {};
+        this.count = 0;
     }
     componentWillMount = () =>{
+        this.setState({done: false})
         this.props.fetchdatas().then(
-            ()=>{this.setState({datas: this.props.datas, tableHeaderData: this.props.datas[1]})},
+            ()=>{this.setState({datas: this.props.datas, tableHeaderData: this.props.datas[1],done: true})},
             (err) =>{console.log(err)}
         );
     }
+    editText = (event,key,index) =>{
+        const data = this.state.datas[index];
+        this.editedData = data;
+        this.editedData[key] = event.target.textContent;
+        if(this.count === 0){
+            this.setState({ editedDataBtn: true }, () =>{
+                this.count =1;
+          });
+        }
+        
+
+     }
     editHandaler = (index) =>{
-       this.setState({done: true, index: index})
+       this.count = 0;
+       this.setState({done: true, index: index,editedDataBtn :false })
     }
     dataShow = () =>{
-        const data = this.state.datas[this.state.index];
+        console.log(this.editedData);
     }
     onSort = (event, sortKey)=>{
         const datas = this.state.datas;
-      
-        datas.sort(function(a, b) {
+        datas.sort((a, b)=> {
             if (a[sortKey] > b[sortKey]) {
             return 1;
             }
@@ -40,11 +55,12 @@ class Table extends Component {
             }
             return 0;
         });
+        this.editedDataBtn = false;
         this.setState({datas:datas})
       }
     render() {
         const {datas} = this.props;
-        const {tableHeaderData} = this.state;
+        const {tableHeaderData,editedDataBtn} = this.state;
         
         let tableHeader=[];
         if(tableHeaderData){
@@ -65,17 +81,17 @@ class Table extends Component {
              <tbody>
                  {datas.map((data, index) =>
                  (
-                     <tr key={index} data-item={data}>
-                     <td contenteditable="true" data-title={data[tableHeader[0]]}>{data[tableHeader[0]]}</td>
-                     <td contenteditable="true" data-title={data[tableHeader[1]]}>{data[tableHeader[1]]}</td>
-                     <td contenteditable="true" data-title={data[tableHeader[2]]}>{data[tableHeader[2]]}</td>
-                     <td contenteditable="true" data-title={data[tableHeader[3]]}>{data[tableHeader[3]]}</td>
+                     <tr key={index} onClick={()=> this.editHandaler(index)}>
+                        <td onKeyDown={(event)=> this.editText(event,tableHeader[0],index)} contenteditable="true">{data[tableHeader[0]]}</td>
+                        <td onKeyDown={(event)=> this.editText(event,tableHeader[1],index)} contenteditable="true">{data[tableHeader[1]]}</td>
+                        <td onKeyDown={(event)=> this.editText(event,tableHeader[2],index)} contenteditable="true">{data[tableHeader[2]]}</td>
+                        <td onKeyDown={(event)=> this.editText(event,tableHeader[3],index)} contenteditable="true">{data[tableHeader[3]]}</td>
                      </tr>
                  )
                  )}
              </tbody>
            </table>
-           <button className="table-row-data-show" onClick={this.dataShow}>Show</button>
+            {editedDataBtn ? <button className="table-row-data-show" onClick={this.dataShow}>Show</button> : null}
           </div>     
         ): (<div className="no-data">No Data Available</div>)
 
