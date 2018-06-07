@@ -13,3 +13,12 @@ td, th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+.data-table-header{
+    cursor: pointer;
+}
+.table-row-data-show{
+    margin-top: 20px;
+    padding: 7px 15px;
+    margin-bottom: 20px;
+}
