@@ -8,8 +8,8 @@ Step 2:  install json-server . Type  ( npm install -g json-server ).
 Step 1: run json-server. Type  ( json-server sample1.json --watch --port 3004 ).<br/>
 Step 2: run front-end. Type ( yarn run dev ).
 
-**Note:**
-[Note: if you want to see another json as table content, replace sample1.json to sample2.json according to Step 1 then refresh table page. Table content will change automatically ] 
+
+[**Note:** if you want to see another json as table content, replace sample1.json to sample2.json according to Step 1 then refresh table page. Table content will change automatically ] 
 
 
 
